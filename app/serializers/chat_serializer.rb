@@ -11,7 +11,7 @@
 #
 
 class ChatSerializer < ActiveModel::Serializer
-  attributes :id, :title, :group
+  attributes :id, :title, :group, :created_at
   belongs_to :admin
   has_many :users
 end

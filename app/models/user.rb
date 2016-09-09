@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :chat_users, dependent: :destroy
   has_many :chats, through: :chat_users
 
+  has_one :fcm_registration
+
   after_create :generate_token
 
   validates :name, presence: true
@@ -30,5 +32,16 @@ class User < ApplicationRecord
       break random_token unless self.class.exists?(token: random_token)
     end
     update(token: token)
+  end
+
+  def fcm_register(registration_token)
+    return false if registration_token.blank?
+
+    if fcm_registration
+      fcm_registration.update(registration_token: registration_token)
+    else
+      build_fcm_registration(registration_token: registration_token)
+      save
+    end
   end
 end

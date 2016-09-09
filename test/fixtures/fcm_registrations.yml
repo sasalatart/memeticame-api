@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: fcm_registrations
+#
+#  id                 :integer          not null, primary key
+#  user_id            :integer
+#  registration_token :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  registration_token: MyString
+
+two:
+  user: two
+  registration_token: MyString

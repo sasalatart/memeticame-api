@@ -7,6 +7,7 @@ class MessagesController < ApplicationController
 
   def create
     @message = Message.new(message_params)
+    @message.chat = @chat
     @message.sender = @current_user
 
     if @message.save
@@ -19,10 +20,10 @@ class MessagesController < ApplicationController
   private
 
   def set_chat
-    @chat = Chat.find_by(id: params[:chat_id])
+    @chat = Chat.find(params[:id])
   end
 
   def message_params
-    params.permit(:chat_id, :content)
+    params.permit(:content)
   end
 end

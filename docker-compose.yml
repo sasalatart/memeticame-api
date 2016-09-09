@@ -11,3 +11,4 @@ web:
     - postgres
   environment:
     - SECRET_KEY_BASE
+    - FCM_KEY
