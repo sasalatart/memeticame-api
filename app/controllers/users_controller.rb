@@ -1,11 +1,15 @@
 class UsersController < ApplicationController
+  def index
+    render json: User.all
+  end
+
   def signup
     @user = User.new(user_params)
 
     if @user.save
       render json: { api_key: @user.token }
     else
-      render status: 403, json: { message: @user.errors.full_messages }
+      render json: { message: @user.errors.full_messages }, status: 403
     end
   end
 
@@ -16,7 +20,7 @@ class UsersController < ApplicationController
       @user.generate_token
       render json: { api_key: @user.token }
     else
-      render status: 403, json: { message: 'Invalid credentials' }
+      render json: { message: 'Invalid credentials' }, status: 403
     end
   end
 
