@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: chat_users
+#
+#  id         :integer          not null, primary key
+#  chat_id    :integer
+#  user_id    :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  chat: one
+  user: one
+
+two:
+  chat: two
+  user: two

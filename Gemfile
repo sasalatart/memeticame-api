@@ -7,6 +7,7 @@ gem 'puma', '~> 3.0'
 
 gem 'active_model_serializers', '~> 0.10.0'
 
+gem 'hirb'
 gem 'annotate'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
