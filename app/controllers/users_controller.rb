@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   def login
     @user = User.find_by(phone_number: params[:phone_number])
 
-    if @user.authenticate(params[:password])
+    if @user&.authenticate(params[:password])
       @user.generate_token
       render json: { api_key: @user.token }
     else

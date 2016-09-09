@@ -4,5 +4,8 @@ Rails.application.routes.draw do
   post '/signup', to: 'users#signup'
   post '/login', to: 'users#login'
   resources :users, except: [:new, :create, :edit, :update]
-  resources :chats
+
+  resources :chats do
+    resources :messages, on: :member, shallow: true
+  end
 end

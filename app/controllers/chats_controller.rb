@@ -1,6 +1,6 @@
 class ChatsController < ApplicationController
   def index
-    render json: @user.chats
+    render json: @current_user.chats
   end
 
   def create

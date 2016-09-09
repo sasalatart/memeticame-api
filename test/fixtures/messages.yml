@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: messages
+#
+#  id         :integer          not null, primary key
+#  sender_id  :integer
+#  chat_id    :integer
+#  content    :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sender_id: 1
+  chat: one
+  content: MyString
+
+two:
+  sender_id: 1
+  chat: two
+  content: MyString
