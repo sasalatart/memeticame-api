@@ -1,0 +1,21 @@
+default: &default
+  adapter : postgresql
+  pool    : 5
+  timeout : 5000
+  port    : 5432
+  username: postgres
+
+test:
+  <<      : *default
+  host    : localhost
+  database: memeticame-api_test
+
+development:
+  <<      : *default
+  host    : localhost
+  database: memeticame-api_development
+
+production:
+  <<      : *default
+  host    : postgres
+  database: memeticame-api_production
