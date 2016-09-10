@@ -2,16 +2,16 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: [:signup, :login]
 
   def index
-    render json: User.all
+    render json: User.all, status: :ok
   end
 
   def signup
     @user = User.new(user_params)
 
     if @user.save
-      render json: { api_key: @user.token }
+      render json: { api_key: @user.token }, status: :created
     else
-      render json: { message: @user.errors.full_messages }, status: 403
+      render json: { message: @user.errors.full_messages }, status: :not_acceptable
     end
   end
 
@@ -20,9 +20,17 @@ class UsersController < ApplicationController
 
     if @user&.authenticate(params[:password])
       @user.generate_token
-      render json: { api_key: @user.token }
+      render json: { api_key: @user.token }, status: :ok
     else
-      render json: { message: 'Invalid credentials' }, status: 403
+      render json: { message: 'Invalid credentials' }, status: :forbidden
+    end
+  end
+
+  def logout
+    if @current_user.fcm_registration.destroy
+      render json: { message: 'Logged out successfully' }, status: :ok
+    else
+      render json: { message: 'Could not logout' }, status: :not_acceptable
     end
   end
 
