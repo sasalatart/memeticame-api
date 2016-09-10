@@ -7,7 +7,7 @@ class ChatsController < ApplicationController
     @chat = Chat.new(chat_params)
     @chat.group = params[:group] == 'true'
     @chat.admin = User.find_by(phone_number: params[:admin])
-    @chat.users = User.where(phone_number: params[:users].values)
+    @chat.users = User.where(phone_number: (params[:users].values << params[:admin]))
 
     if @chat.save
       render json: @chat, status: :created

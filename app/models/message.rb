@@ -34,6 +34,7 @@ class Message < ApplicationRecord
       data: { id: id, chat_id: chat.id, sender_phone: sender_phone, message: content },
       collapse_key: 'updated_score'
     }
-    response = fcm.send(registration_ids, options)
+
+    fcm.send(registration_ids, options)
   end
 end
