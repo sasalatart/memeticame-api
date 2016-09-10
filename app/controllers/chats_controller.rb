@@ -1,6 +1,6 @@
 class ChatsController < ApplicationController
   def index
-    render json: @current_user.chats
+    render json: @current_user.chats, status: :ok
   end
 
   def create
@@ -10,9 +10,9 @@ class ChatsController < ApplicationController
     @chat.users = User.where(phone_number: params[:users].values)
 
     if @chat.save
-      render json: @chat
+      render json: @chat, status: :created
     else
-      render json: { message: @chat.errors.full_messages }
+      render json: { message: @chat.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

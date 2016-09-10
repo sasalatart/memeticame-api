@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
   before_action :set_chat
 
   def index
-    render json: @chat.messages
+    render json: @chat.messages, status: :ok
   end
 
   def create
@@ -11,9 +11,9 @@ class MessagesController < ApplicationController
     @message.sender = @current_user
 
     if @message.save
-      render json: @message
+      render json: @message, status: :created
     else
-      render json: { message: @message.errors.full_messages }
+      render json: { message: @message.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
