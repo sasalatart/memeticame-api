@@ -17,10 +17,19 @@ class Chat < ApplicationRecord
 
   has_many :chat_users, dependent: :destroy
   has_many :users, through: :chat_users
-  has_many :messages
+  has_many :messages, dependent: :destroy
 
   validates :title, presence: true
   validates :admin, presence: true
+
+  def remove_user(user)
+    if users.size > 1
+      users.delete(user)
+      update(admin: users.sample)
+    else
+      destroy
+    end
+  end
 
   private
 

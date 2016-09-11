@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :chats do
     member do
       resources :messages, shallow: true
+      post '/leave', to: 'chats#leave'
     end
   end
 end

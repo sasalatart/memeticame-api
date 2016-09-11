@@ -1,4 +1,6 @@
 class ChatsController < ApplicationController
+  before_action :set_chat, only: [:leave]
+
   def index
     render json: @current_user.chats, status: :ok
   end
@@ -16,9 +18,21 @@ class ChatsController < ApplicationController
     end
   end
 
+  def leave
+    if @chat.remove_user(@current_user)
+      render json: { message: 'User successfully removed from chat' }, status: :ok
+    else
+      render json: { message: 'User could not be removed from chat' }, status: :bad_request
+    end
+  end
+
   private
 
   def chat_params
     params.permit(:title)
+  end
+
+  def set_chat
+    @chat = Chat.find(params[:id])
   end
 end
