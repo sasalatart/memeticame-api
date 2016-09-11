@@ -11,6 +11,8 @@
 #
 
 class Chat < ApplicationRecord
+  after_create :fcm_broadcast
+
   belongs_to :admin, class_name: 'User', foreign_key: 'admin_id'
 
   has_many :chat_users, dependent: :destroy
@@ -19,4 +21,18 @@ class Chat < ApplicationRecord
 
   validates :title, presence: true
   validates :admin, presence: true
+
+  private
+
+  def fcm_broadcast
+    fcm = FCM.new(Rails.application.secrets.fcm_key)
+    registration_ids = FcmRegistration.where(user: users.map(&:id)).map(&:registration_token)
+
+    options = {
+      data: ChatSerializer.new(self, {}),
+      collapse_key: 'chat_created'
+    }
+
+    fcm.send(registration_ids, options)
+  end
 end

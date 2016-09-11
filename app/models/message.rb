@@ -31,8 +31,8 @@ class Message < ApplicationRecord
     registration_ids = FcmRegistration.where(user: chat.users).map(&:registration_token)
 
     options = {
-      data: { id: id, chat_id: chat.id, sender_phone: sender_phone, message: content },
-      collapse_key: 'updated_score'
+      data: MessageSerializer.new(self, {}),
+      collapse_key: 'message_created'
     }
 
     fcm.send(registration_ids, options)
