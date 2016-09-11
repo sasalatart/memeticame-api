@@ -17,5 +17,5 @@ development:
 
 production:
   <<      : *default
-  host    : postgres
+  host    : postgres_db
   database: memeticame-api_production
