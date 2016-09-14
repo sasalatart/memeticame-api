@@ -9,6 +9,7 @@ class MessagesController < ApplicationController
     @message = Message.new(message_params)
     @message.chat = @chat
     @message.sender = @current_user
+    @message.build_base64_attachment(params[:attachment]) if params[:attachment]
 
     if @message.save
       render json: @message, status: :created

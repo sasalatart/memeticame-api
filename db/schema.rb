@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160909175520) do
+ActiveRecord::Schema.define(version: 20160914180523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,10 +26,10 @@ ActiveRecord::Schema.define(version: 20160909175520) do
 
   create_table "chats", force: :cascade do |t|
     t.string   "title"
-    t.boolean  "group"
+    t.boolean  "group",      default: false
     t.integer  "admin_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "fcm_registrations", force: :cascade do |t|
@@ -44,8 +44,12 @@ ActiveRecord::Schema.define(version: 20160909175520) do
     t.integer  "sender_id"
     t.integer  "chat_id"
     t.string   "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
     t.index ["chat_id"], name: "index_messages_on_chat_id", using: :btree
   end
 

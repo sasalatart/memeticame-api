@@ -2,12 +2,16 @@
 #
 # Table name: messages
 #
-#  id         :integer          not null, primary key
-#  sender_id  :integer
-#  chat_id    :integer
-#  content    :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                      :integer          not null, primary key
+#  sender_id               :integer
+#  chat_id                 :integer
+#  content                 :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  attachment_file_name    :string
+#  attachment_content_type :string
+#  attachment_file_size    :integer
+#  attachment_updated_at   :datetime
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

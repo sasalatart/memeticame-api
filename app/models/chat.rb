@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  title      :string
-#  group      :boolean
+#  group      :boolean          default(FALSE)
 #  admin_id   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
