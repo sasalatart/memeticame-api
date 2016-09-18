@@ -13,6 +13,7 @@ gem 'annotate'
 gem 'fcm'
 
 gem 'paperclip', '~> 5.0.0'
+gem 'paperclip-av-transcoder'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
