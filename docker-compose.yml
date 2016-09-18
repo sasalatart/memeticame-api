@@ -3,7 +3,7 @@ postgres_db:
 
 web:
   build: .
-  command: puma -b tcp://0.0.0.0:3000
+  command: rails server -b 0.0.0.0
   ports:
     - '80:3000'
     - '443:3000'
@@ -12,3 +12,8 @@ web:
   environment:
     - SECRET_KEY_BASE
     - MEMETICAME_FCM_KEY
+    - RAILS_SERVE_STATIC_FILES=true
+    - RAILS_LOG_TO_STDOUT=true
+  volumes:
+    - ./volumes/memeticame:/usr/src/app/public/system
+  restart: always
