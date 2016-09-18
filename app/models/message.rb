@@ -28,9 +28,7 @@ class Message < ApplicationRecord
 
   validates_attachment_content_type :attachment, content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
 
-  def sender_phone
-    sender.phone_number
-  end
+  delegate :phone, to: :sender, prefix: true
 
   def attachment_link
     url = attachment? ? attachment.url : nil

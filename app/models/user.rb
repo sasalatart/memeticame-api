@@ -12,6 +12,8 @@
 #
 
 class User < ApplicationRecord
+  alias_attribute :phone, :phone_number
+
   has_many :chat_users, dependent: :destroy
   has_many :chats, through: :chat_users
 
