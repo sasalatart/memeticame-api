@@ -5,11 +5,11 @@ Rails.application.routes.draw do
   post '/signup', to: 'users#signup'
   post '/login', to: 'users#login'
   get '/logout', to: 'users#logout'
-  resources :users, except: [:new, :create, :edit, :update]
+  resources :users, except: [:show, :new, :create, :edit, :update, :destroy]
 
-  resources :chats do
+  resources :chats, except: [:show, :update, :destroy] do
     member do
-      resources :messages, shallow: true
+      resources :messages, shallow: true, except: [:show, :update, :destroy]
       post '/leave', to: 'chats#leave'
     end
   end
