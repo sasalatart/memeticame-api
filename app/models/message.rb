@@ -28,6 +28,8 @@ class Message < ApplicationRecord
   validates :chat, presence: true
   validates :content, presence: true
 
+  validate :sender_belongs_to_chat
+
   validates_attachment_content_type :attachment,
                                     content_type: /\A(image\/.*|video\/.*|audio\/.*)\z/
 
@@ -68,5 +70,9 @@ class Message < ApplicationRecord
     }
 
     fcm.send(registration_ids, options)
+  end
+
+  def sender_belongs_to_chat
+    errors.add(:sender, 'must belong to chat') unless chat.users.include?(sender)
   end
 end

@@ -2,7 +2,11 @@ class MessagesController < ApplicationController
   before_action :set_chat
 
   def index
-    render json: @chat.messages, status: :ok
+    if @chat.users.include?(@current_user)
+      render json: @chat.messages, status: :ok
+    else
+      render json: { message: 'You do not belong to the chat' }, status: :bad_request
+    end
   end
 
   def create
