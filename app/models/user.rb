@@ -12,6 +12,8 @@
 #
 
 class User < ApplicationRecord
+  after_create :fcm_broadcast
+
   alias_attribute :phone, :phone_number
 
   has_many :chat_users, dependent: :destroy
@@ -45,5 +47,19 @@ class User < ApplicationRecord
       build_fcm_registration(registration_token: registration_token)
       save
     end
+  end
+
+  private
+
+  def fcm_broadcast
+    fcm = FCM.new(Rails.application.secrets.fcm_key)
+    registration_ids = FcmRegistration.all.map(&:registration_token)
+
+    options = {
+      data: UserSerializer.new(self, {}),
+      collapse_key: 'user_created'
+    }
+
+    fcm.send(registration_ids, options)
   end
 end
