@@ -22,6 +22,7 @@ class Message < ApplicationRecord
 
   has_attached_file :attachment,
                     styles: ->(a) { a.instance.set_style },
+                    hash_secret: Rails.application.secrets.secret_key_base,
                     dependent: :destroy
 
   validates :sender, presence: true
@@ -30,13 +31,17 @@ class Message < ApplicationRecord
 
   validate :sender_belongs_to_chat
 
-  validates_attachment_content_type :attachment,
-                                    content_type: /\A(image\/.*|video\/.*|audio\/.*)\z/
+  do_not_validate_attachment_file_type :attachment
 
   delegate :phone, to: :sender, prefix: true
 
   def attachment_link
-    url = attachment? ? attachment.url(:optimized) : nil
+    url = if attachment_content_type =~ /\A(image\/.*|video\/.*|audio\/.*)\z/
+            attachment.url(:optimized)
+          else
+            attachment? ? attachment.url : nil
+          end
+
     { name: attachment_file_name, mime_type: attachment_content_type, url: url }
   end
 
@@ -55,6 +60,8 @@ class Message < ApplicationRecord
       { optimized: { geometry: '640x360#', format: 'mp4', processors: [:transcoder] } }
     elsif attachment_content_type =~ /audio/
       { optimized: { format: 'mp3', processors: [:transcoder] } }
+    else
+      {}
     end
   end
 
