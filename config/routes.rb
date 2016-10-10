@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   resources :chats, except: [:show, :update, :destroy] do
     member do
       resources :messages, shallow: true, except: [:show, :update, :destroy]
-      post '/leave', to: 'chats#leave'
+      post '/leave', to: 'chats#leave', as: :leave
+      post '/users/:user_id/kick', to: 'chats#kick', as: :kick_user
     end
   end
 end

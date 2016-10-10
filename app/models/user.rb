@@ -51,15 +51,9 @@ class User < ApplicationRecord
 
   private
 
-  def fcm_broadcast
+  def fcm_broadcast(options = { data: UserSerializer.new(self, {}), collapse_key: 'user_created' })
     fcm = FCM.new(Rails.application.secrets.fcm_key)
     registration_ids = FcmRegistration.all.map(&:registration_token)
-
-    options = {
-      data: UserSerializer.new(self, {}),
-      collapse_key: 'user_created'
-    }
-
     fcm.send(registration_ids, options)
   end
 end

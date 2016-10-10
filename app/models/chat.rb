@@ -22,26 +22,33 @@ class Chat < ApplicationRecord
   validates :title, presence: true
   validates :admin, presence: true
 
-  def remove_user(user)
-    if users.size > 1
-      users.delete(user)
-      update(admin: users.sample)
-    else
-      destroy
-    end
+  def let_go(user)
+    errors.add(:admin, 'can not leave chat until all users are removed.') if users.size > 1 && user == admin
+    return false if errors.any?
+
+    users.size > 1 ? remove_user(user, user, "Leaving #{@chat.title}") : destroy
+  end
+
+  def kick(user, current_user)
+    errors.add(:admin, 'are the only ones who can kick people.') unless current_user == admin
+    errors.add(:base, 'users can not kick themselves.') unless current_user != user
+    errors.add(:base, 'user is not present in chat.') unless users.include?(user)
+    return false if errors.any?
+
+    remove_user(user, current_user, "Kicking #{user.name}")
   end
 
   private
 
-  def fcm_broadcast
+  def fcm_broadcast(options = { data: ChatSerializer.new(self, {}), collapse_key: 'chat_created' })
     fcm = FCM.new(Rails.application.secrets.fcm_key)
     registration_ids = FcmRegistration.where(user: users.map(&:id)).map(&:registration_token)
-
-    options = {
-      data: ChatSerializer.new(self, {}),
-      collapse_key: 'chat_created'
-    }
-
     fcm.send(registration_ids, options)
+  end
+
+  def remove_user(user, remover, message)
+    fcm_broadcast(data: { user_id: user.id, chat_id: id }, collapse_key: 'user_kicked')
+    Message.create(content: message, chat: self, sender: remover)
+    users.delete(user)
   end
 end

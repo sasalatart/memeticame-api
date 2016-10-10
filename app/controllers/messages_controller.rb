@@ -5,7 +5,7 @@ class MessagesController < ApplicationController
     if @chat.users.include?(@current_user)
       render json: @chat.messages, status: :ok
     else
-      render json: { message: 'You do not belong to the chat' }, status: :bad_request
+      render json: { message: 'Not allowed' }, status: :bad_request
     end
   end
 

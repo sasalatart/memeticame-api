@@ -1,5 +1,6 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [:leave]
+  before_action :set_chat, only: [:leave, :kick]
+  before_action :set_user, only: [:kick]
 
   def index
     render json: @current_user.chats, status: :ok
@@ -19,10 +20,18 @@ class ChatsController < ApplicationController
   end
 
   def leave
-    if @chat.remove_user(@current_user)
+    if @chat.let_go(@current_user)
       render json: { message: 'User successfully removed from chat' }, status: :ok
     else
-      render json: { message: 'User could not be removed from chat' }, status: :bad_request
+      render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
+    end
+  end
+
+  def kick
+    if @chat.kick(@user, @current_user)
+      render json: { message: 'User successfully kicked from chat' }, status: :ok
+    else
+      render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
     end
   end
 
@@ -34,5 +43,9 @@ class ChatsController < ApplicationController
 
   def set_chat
     @chat = Chat.find(params[:id])
+  end
+
+  def set_user
+    @user = User.find(params[:user_id])
   end
 end
