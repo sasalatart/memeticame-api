@@ -26,7 +26,7 @@ class Chat < ApplicationRecord
     errors.add(:admin, 'can not leave chat until all users are removed.') if users.size > 1 && user == admin
     return false if errors.any?
 
-    users.size > 1 ? remove_user(user, user, "Leaving #{@chat.title}") : destroy
+    users.size > 1 ? remove_user(user, user, "Leaving #{title}") : destroy
   end
 
   def kick(user, current_user)
