@@ -47,7 +47,15 @@ class Chat < ApplicationRecord
   end
 
   def remove_user(user, remover, message)
-    fcm_broadcast(data: { user_id: user.id, chat_id: id }, collapse_key: 'user_kicked')
+    options = {
+      data: {
+        user: UserSerializer.new(user, {}),
+        chat: ChatSerializer.new(self, {})
+      },
+      collapse_key: 'user_kicked'
+    }
+
+    fcm_broadcast(options)
     Message.create(content: message, chat: self, sender: remover)
     users.delete(user)
   end
