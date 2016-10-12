@@ -1,9 +1,17 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [:leave, :kick]
+  before_action :set_chat, only: [:show, :leave, :kick, :add_users]
   before_action :set_user, only: [:kick]
 
   def index
     render json: @current_user.chats, status: :ok
+  end
+
+  def show
+    if @chat.users.include?(@current_user)
+      render json: @chat, status: :ok
+    else
+      render json: { message: 'Not allowed' }, status: :bad_request
+    end
   end
 
   def create
@@ -30,6 +38,14 @@ class ChatsController < ApplicationController
   def kick
     if @chat.kick(@user, @current_user)
       render json: { message: 'User successfully kicked from chat' }, status: :ok
+    else
+      render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
+    end
+  end
+
+  def add_users
+    if @chat.add_users(User.where(phone_number: params[:users].values), @current_user)
+      render json: @chat, status: :ok
     else
       render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
     end

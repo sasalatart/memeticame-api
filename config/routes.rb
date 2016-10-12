@@ -7,11 +7,12 @@ Rails.application.routes.draw do
   get '/logout', to: 'users#logout'
   resources :users, except: [:show, :new, :create, :edit, :update, :destroy]
 
-  resources :chats, except: [:show, :update, :destroy] do
+  resources :chats, except: [:update, :destroy] do
     member do
       resources :messages, shallow: true, except: [:show, :update, :destroy]
-      post '/leave', to: 'chats#leave', as: :leave
+      post '/leave', to: 'chats#leave'
       post '/users/:user_id/kick', to: 'chats#kick', as: :kick_user
+      post '/add_users', to: 'chats#add_users'
     end
   end
 end

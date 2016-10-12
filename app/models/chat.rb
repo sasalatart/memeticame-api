@@ -38,6 +38,24 @@ class Chat < ApplicationRecord
     remove_user(user, current_user, "Kicking #{user.name}")
   end
 
+  def add_users(new_users, current_user)
+    errors.add(:users, 'were not found.') unless new_users.any?
+    return false if errors.any?
+
+    Message.create(content: "Adding #{new_users.map(&:name).join(', ')} to this group", chat: self, sender: current_user)
+    users << new_users
+
+    options = {
+      data: {
+        users: ActiveModel::Serializer::CollectionSerializer.new(new_users, each_serializer: UserSerializer),
+        chat: ChatSerializer.new(self, {})
+      },
+      collapse_key: 'users_added'
+    }
+
+    fcm_broadcast(options)
+  end
+
   private
 
   def fcm_broadcast(options = { data: ChatSerializer.new(self, {}), collapse_key: 'chat_created' })
