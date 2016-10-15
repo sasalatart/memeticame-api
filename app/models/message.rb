@@ -58,7 +58,7 @@ class Message < ApplicationRecord
       { optimized: '640x480>' }
     elsif attachment_content_type =~ /video/
       { optimized: { geometry: '640x360#', format: 'mp4', processors: [:transcoder] } }
-    elsif attachment_content_type =~ /audio/
+    elsif attachment_content_type =~ /audio/ && !(attachment_content_type =~ /memeaudio/)
       { optimized: { format: 'mp3', processors: [:transcoder] } }
     else
       {}
