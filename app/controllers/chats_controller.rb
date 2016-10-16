@@ -1,5 +1,5 @@
 class ChatsController < ApplicationController
-  before_action :set_chat, only: [:show, :leave, :kick, :add_users]
+  before_action :set_chat, only: [:show, :leave, :kick, :invite, :invitations]
   before_action :set_user, only: [:kick]
 
   def index
@@ -18,13 +18,24 @@ class ChatsController < ApplicationController
     @chat = Chat.new(chat_params)
     @chat.group = params[:group] == 'true'
     @chat.admin = User.find_by(phone_number: params[:admin])
-    @chat.users = User.where(phone_number: (params[:users].values << params[:admin]))
+    invitations = []
 
-    if @chat.save
-      render json: @chat, status: :created
-    else
-      render json: { message: @chat.errors.full_messages }, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      if @chat.group
+        @chat.users = User.where(phone_number: params[:admin])
+        invitations = @chat.invite!(User.where(phone_number: params[:users].values), @current_user)
+      else
+        @chat.users = User.where(phone_number: (params[:users].values << params[:admin]))
+      end
+
+      @chat.save!
     end
+
+    @chat.broadcast_invitations(invitations)
+    render json: @chat, status: :created
+
+  rescue ActiveRecord::RecordInvalid => exception
+    render json: { message: exception.message }, status: :unprocessable_entity
   end
 
   def leave
@@ -43,12 +54,19 @@ class ChatsController < ApplicationController
     end
   end
 
-  def add_users
-    if @chat.add_users(User.where(phone_number: params[:users].values), @current_user)
+  def invite
+    ActiveRecord::Base.transaction do
+      invitations = @chat.invite!(User.where(phone_number: params[:users].values), @current_user)
+      @chat.broadcast_invitations(invitations)
       render json: @chat, status: :ok
-    else
-      render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
     end
+
+  rescue ActiveRecord::RecordInvalid => exception
+    render json: { message: exception.message }, status: :unprocessable_entity
+  end
+
+  def invitations
+    render json: @chat.chat_invitations, status: :ok
   end
 
   private

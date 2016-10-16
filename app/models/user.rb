@@ -13,15 +13,16 @@
 
 class User < ApplicationRecord
   after_create :fcm_broadcast
+  after_create :generate_token
 
   alias_attribute :phone, :phone_number
 
   has_many :chat_users, dependent: :destroy
   has_many :chats, through: :chat_users
 
-  has_one :fcm_registration
+  has_many :chat_invitations, dependent: :destroy
 
-  after_create :generate_token
+  has_one :fcm_registration
 
   validates :name, presence: true
 
@@ -51,7 +52,7 @@ class User < ApplicationRecord
 
   private
 
-  def fcm_broadcast(options = { data: UserSerializer.new(self, {}), collapse_key: 'user_created' })
+  def fcm_broadcast(options = { data: { user: UserSerializer.new(self, {}) }, collapse_key: 'user_created' })
     fcm = FCM.new(Rails.application.secrets.fcm_key)
     registration_ids = FcmRegistration.all.map(&:registration_token)
     fcm.send(registration_ids, options)

@@ -12,7 +12,15 @@ Rails.application.routes.draw do
       resources :messages, shallow: true, except: [:show, :update, :destroy]
       post '/leave', to: 'chats#leave'
       post '/users/:user_id/kick', to: 'chats#kick', as: :kick_user
-      post '/add_users', to: 'chats#add_users'
+      post '/invite', to: 'chats#invite'
+      get '/invitations', to: 'chats#invitations'
+    end
+  end
+
+  resources :chat_invitations, only: [:index] do
+    member do
+      post '/accept', to: 'chat_invitations#accept'
+      post '/reject', to: 'chat_invitations#reject'
     end
   end
 end

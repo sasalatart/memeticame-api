@@ -67,7 +67,7 @@ class Message < ApplicationRecord
 
   private
 
-  def fcm_broadcast(options = { data: MessageSerializer.new(self, {}), collapse_key: 'message_created' })
+  def fcm_broadcast(options = { data: { message: MessageSerializer.new(self, {}) }, collapse_key: 'message_created' })
     fcm = FCM.new(Rails.application.secrets.fcm_key)
     registration_ids = FcmRegistration.where(user: chat.users).map(&:registration_token)
     fcm.send(registration_ids, options)
