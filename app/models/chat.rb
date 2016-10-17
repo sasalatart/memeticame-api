@@ -60,8 +60,8 @@ class Chat < ApplicationRecord
 
   def remove_user(user, remover, message)
     fcm_broadcast(chat_user_options(user, 'user_kicked'))
-    Message.create(content: message, chat: self, sender: remover)
     users.delete(user)
+    Message.create(content: message, chat: self, sender: remover)
   end
 
   def chat_user_options(user, key)
