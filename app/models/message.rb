@@ -36,13 +36,8 @@ class Message < ApplicationRecord
   delegate :phone, to: :sender, prefix: true
 
   def attachment_link
-    url = if attachment_content_type =~ /\A(image\/.*|video\/.*|audio\/.*)\z/
-            attachment.url(:optimized)
-          else
-            attachment? ? attachment.url : nil
-          end
-
-    { name: attachment_file_name, mime_type: attachment_content_type, url: url }
+    url = attachment? ? attachment.url : nil
+    { name: attachment_file_name, mime_type: attachment_content_type, url: url, size: attachment_file_size }
   end
 
   def build_base64_attachment(attachment_params)
@@ -55,11 +50,11 @@ class Message < ApplicationRecord
 
   def set_style
     if attachment_content_type =~ /image/
-      { optimized: '640x480>' }
+      { original: '640x480>' }
     elsif attachment_content_type =~ /video/
-      { optimized: { geometry: '640x360#', format: 'mp4', processors: [:transcoder] } }
+      { original: { geometry: '640x360#', format: 'mp4', processors: [:transcoder] } }
     elsif attachment_content_type =~ /audio/ && !(attachment_content_type =~ /memeaudio/)
-      { optimized: { format: 'mp3', processors: [:transcoder] } }
+      { original: { format: 'mp3', processors: [:transcoder] } }
     else
       {}
     end
