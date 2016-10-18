@@ -40,14 +40,15 @@ class Chat < ApplicationRecord
   end
 
   def invite!(users, current_user)
-    raise 'No users were added' unless users.any?
     users.map { |user| ChatInvitation.create!(user: user, chat: self) }
   end
 
   def broadcast_invitations(chat_invitations)
     invited_user_ids = User.joins(:chat_invitations).where(chat_invitations: { id: chat_invitations.map(&:id) })
-    member_users_ids = users.map(&:id)
-    fcm_broadcast(chat_invitations_options(chat_invitations, 'users_invited'), invited_user_ids + member_users_ids)
+    return unless invited_user_ids.any?
+
+    user_ids = invited_user_ids + users.map(&:id)
+    fcm_broadcast(chat_invitations_options(chat_invitations, 'users_invited'), user_ids)
   end
 
   private

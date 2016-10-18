@@ -18,6 +18,7 @@ class ChatsController < ApplicationController
     @chat = Chat.new(chat_params)
     @chat.group = params[:group] == 'true'
     @chat.admin = User.find_by(phone_number: params[:admin])
+    params[:users] ||= {}
     invitations = []
 
     ActiveRecord::Base.transaction do
