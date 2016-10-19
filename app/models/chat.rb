@@ -39,7 +39,7 @@ class Chat < ApplicationRecord
     remove_user(user, current_user, "Kicking #{user.name}")
   end
 
-  def invite!(users, current_user)
+  def invite!(users)
     users.map { |user| ChatInvitation.create!(user: user, chat: self) }
   end
 
@@ -61,8 +61,8 @@ class Chat < ApplicationRecord
 
   def remove_user(user, remover, message)
     fcm_broadcast(chat_user_options(user, 'user_kicked'))
-    users.delete(user)
     Message.create(content: message, chat: self, sender: remover)
+    users.delete(user)
   end
 
   def chat_user_options(user, key)
