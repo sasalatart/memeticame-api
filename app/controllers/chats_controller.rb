@@ -41,7 +41,7 @@ class ChatsController < ApplicationController
 
   def leave
     if @chat.let_go(@current_user)
-      render json: { message: 'User successfully removed from chat' }, status: :ok
+      render json: @chat, status: :ok
     else
       render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
     end
@@ -49,7 +49,7 @@ class ChatsController < ApplicationController
 
   def kick
     if @chat.kick(@user, @current_user)
-      render json: { message: 'User successfully kicked from chat' }, status: :ok
+      render json: @chat, status: :ok
     else
       render json: { message: @chat.errors.full_messages.join(', ') }, status: :bad_request
     end
