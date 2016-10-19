@@ -13,6 +13,8 @@ class ChatUser < ApplicationRecord
   belongs_to :chat
   belongs_to :user
 
-  validates :user, presence: true
+  validates :user, presence: true,
+                   uniqueness: { scope: :chat }
+
   validates :chat, presence: true
 end
