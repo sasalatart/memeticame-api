@@ -24,8 +24,8 @@ class ChatInvitation < ApplicationRecord
     errors.add(:user, 'is not the invited user') if accepting_user != user
     return false if errors.any?
 
-    Message.create(chat: chat, sender: accepting_user, content: 'I just accepted the invitation')
     chat.users << accepting_user
+    Message.create(chat: chat, sender: accepting_user, content: 'I just accepted the invitation to join this chat')
     fcm_broadcast('chat_invitation_accepted')
     destroy
   end
