@@ -24,7 +24,7 @@ class ChatsController < ApplicationController
     ActiveRecord::Base.transaction do
       if @chat.group
         @chat.users = User.where(phone_number: params[:admin])
-        invitations = @chat.invite!(User.where(phone_number: params[:users].values), @current_user)
+        invitations = @chat.invite!(User.where(phone_number: params[:users].values))
       else
         @chat.users = User.where(phone_number: (params[:users].values << params[:admin]))
       end
@@ -57,7 +57,7 @@ class ChatsController < ApplicationController
 
   def invite
     ActiveRecord::Base.transaction do
-      invitations = @chat.invite!(User.where(phone_number: params[:users].values), @current_user)
+      invitations = @chat.invite!(User.where(phone_number: params[:users].values))
       @chat.broadcast_invitations(invitations)
       render json: @chat, status: :ok
     end
