@@ -25,7 +25,7 @@ class ChatInvitation < ApplicationRecord
     return false if errors.any?
 
     chat.users << accepting_user
-    Message.create(chat: chat, sender: accepting_user, content: 'I just accepted the invitation to join this chat')
+    Message.create(chat: chat, sender: chat.admin, content: "#{accepting_user.name} just accepted the invitation")
     fcm_broadcast('chat_invitation_accepted')
     destroy
   end
