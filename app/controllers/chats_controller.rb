@@ -55,19 +55,19 @@ class ChatsController < ApplicationController
     end
   end
 
+  def invitations
+    render json: @chat.chat_invitations, status: :ok
+  end
+
   def invite
     ActiveRecord::Base.transaction do
       invitations = @chat.invite!(User.where(phone_number: params[:users].values))
       @chat.broadcast_invitations(invitations)
-      render json: @chat, status: :ok
+      render json: invitations, status: :ok
     end
 
   rescue ActiveRecord::RecordInvalid => exception
     render json: { message: exception.message }, status: :unprocessable_entity
-  end
-
-  def invitations
-    render json: @chat.chat_invitations, status: :ok
   end
 
   private
