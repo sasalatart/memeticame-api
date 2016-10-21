@@ -2,10 +2,10 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   post '/fcm_register', to: 'fcm_registrations#register'
+  post '/users', to: 'users#index'
   post '/signup', to: 'users#signup'
   post '/login', to: 'users#login'
   get '/logout', to: 'users#logout'
-  resources :users, except: [:show, :new, :create, :edit, :update, :destroy]
 
   resources :chats, except: [:update, :destroy] do
     member do

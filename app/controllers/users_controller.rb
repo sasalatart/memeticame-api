@@ -2,7 +2,8 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: [:signup, :login]
 
   def index
-    render json: User.all, status: :ok
+    params[:phone_numbers] ||= {}
+    render json: User.where(phone_number: params[:phone_numbers].values), status: :ok
   end
 
   def signup
@@ -11,7 +12,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: { api_key: @user.token }, status: :created
     else
-      render json: { message: @user.errors.full_messages }, status: :not_acceptable
+      render json: { message: @user.errors.full_messages.join(', ') }, status: :not_acceptable
     end
   end
 
