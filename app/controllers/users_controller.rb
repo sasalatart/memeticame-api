@@ -3,7 +3,8 @@ class UsersController < ApplicationController
 
   def index
     params[:phone_numbers] ||= {}
-    render json: User.where(phone_number: params[:phone_numbers].values), status: :ok
+    phone_numbers = params[:phone_numbers].values.map { |phone_number| Phony.normalize(phone_number) }
+    render json: User.where(phone_number: phone_numbers), status: :ok
   end
 
   def signup

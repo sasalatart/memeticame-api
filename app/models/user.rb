@@ -12,6 +12,8 @@
 #
 
 class User < ApplicationRecord
+  before_validation :normalize_phone_number
+
   after_create :fcm_broadcast
   after_create :generate_token
 
@@ -56,5 +58,9 @@ class User < ApplicationRecord
     fcm = FCM.new(Rails.application.secrets.fcm_key)
     registration_ids = FcmRegistration.all.map(&:registration_token)
     fcm.send(registration_ids, options)
+  end
+
+  def normalize_phone_number
+    self.phone_number = Phony.normalize(phone_number)
   end
 end
