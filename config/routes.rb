@@ -23,4 +23,6 @@ Rails.application.routes.draw do
       post '/reject', to: 'chat_invitations#reject'
     end
   end
+
+  resources :plain_memes, only: [:index]
 end
