@@ -16,19 +16,11 @@ class ChatsController < ApplicationController
 
   def create
     @chat = Chat.new(chat_params)
-    @chat.group = params[:group] == 'true'
-    @chat.admin = User.find_by(phone_number: params[:admin])
-    params[:users] ||= {}
     invitations = []
+    params[:users] ||= {}
 
     ActiveRecord::Base.transaction do
-      if @chat.group
-        @chat.users = User.where(phone_number: params[:admin])
-        invitations = @chat.invite!(User.where(phone_number: params[:users].values))
-      else
-        @chat.users = User.where(phone_number: (params[:users].values << params[:admin]))
-      end
-
+      invitations = @chat.set_users!(params[:group], params[:admin], params[:users].values)
       @chat.save!
     end
 
@@ -61,7 +53,7 @@ class ChatsController < ApplicationController
 
   def invite
     ActiveRecord::Base.transaction do
-      invitations = @chat.invite!(User.where(phone_number: params[:users].values))
+      invitations = @chat.invite!(params[:users].values)
       @chat.broadcast_invitations(invitations)
       render json: invitations, status: :ok
     end

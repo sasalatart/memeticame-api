@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def login
-    @user = User.find_by(phone_number: params[:phone_number])
+    @user = User.find_by(phone_number: Phony.normalize(params[:phone_number]))
 
     if @user&.authenticate(params[:password])
       @user.generate_token

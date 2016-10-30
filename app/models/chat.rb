@@ -23,6 +23,19 @@ class Chat < ApplicationRecord
   validates :title, presence: true
   validates :admin, presence: true
 
+  def set_users!(group_params, admin_phone, participant_phones)
+    participant_phones.map! { |phone_number| Phony.normalize(phone_number) }
+    admin_phone = Phony.normalize(admin_phone)
+
+    self.group = (group_params == 'true')
+    self.admin = User.find_by(phone_number: admin_phone)
+
+    phones_to_add = group ? admin_phone : participant_phones << admin_phone
+    self.users = User.where(phone_number: phones_to_add)
+
+    group ? invite!(participant_phones) : []
+  end
+
   def let_go(user)
     errors.add(:admin, 'can not leave chat until all users are removed.') if users.size > 1 && user == admin
     return false if errors.any?
@@ -39,8 +52,10 @@ class Chat < ApplicationRecord
     remove_user(user, current_user, "Kicking #{user.name}")
   end
 
-  def invite!(users)
-    users.map { |user| ChatInvitation.create!(user: user, chat: self) }
+  def invite!(phone_numbers)
+    phone_numbers.map! { |phone_number| Phony.normalize(phone_number) }
+    User.where(phone_number: phone_numbers)
+        .map { |user| ChatInvitation.create!(user: user, chat: self) }
   end
 
   def broadcast_invitations(chat_invitations)
