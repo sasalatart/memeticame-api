@@ -17,6 +17,9 @@ gem 'fcm'
 gem 'paperclip', '~> 5.0.0'
 gem 'paperclip-av-transcoder'
 
+gem 'rubyzip'
+gem 'mini_magick'
+
 gem 'phony'
 
 gem 'bcrypt', '~> 3.1.7'

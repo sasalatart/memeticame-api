@@ -83,6 +83,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
+    mini_magick (4.5.1)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     multi_xml (0.5.5)
@@ -133,6 +134,7 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    rubyzip (1.2.0)
     spring (1.7.2)
     spring-watcher-listen (2.0.0)
       listen (>= 2.7, < 4.0)
@@ -165,12 +167,14 @@ DEPENDENCIES
   fcm
   hirb
   listen (~> 3.0.5)
+  mini_magick
   paperclip (~> 5.0.0)
   paperclip-av-transcoder
   pg (~> 0.18)
   phony
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
+  rubyzip
   spring
   spring-watcher-listen (~> 2.0.0)
   traceroute

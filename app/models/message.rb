@@ -55,6 +55,8 @@ class Message < ApplicationRecord
       { original: { geometry: '640x360#', format: 'mp4', processors: [:transcoder] } }
     elsif attachment_content_type =~ /audio/ && !(attachment_content_type =~ /memeaudio/)
       { original: { format: 'mp3', processors: [:transcoder] } }
+    elsif attachment_content_type =~ /memeaudio/
+      { unzipped: { processors: [:unzipper] } }
     else
       {}
     end
