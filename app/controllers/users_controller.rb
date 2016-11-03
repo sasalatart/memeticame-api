@@ -7,6 +7,16 @@ class UsersController < ApplicationController
     render json: User.where(phone_number: phone_numbers), status: :ok
   end
 
+  def show
+    @user = User.find_by(phone_number: Phony.normalize(params[:phone_number]))
+
+    if @user
+      render json: @user, status: :ok
+    else
+      render json: { message: 'User not found' }, status: :not_found
+    end
+  end
+
   def signup
     @user = User.new(user_params)
 

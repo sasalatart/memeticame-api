@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   post '/fcm_register', to: 'fcm_registrations#register'
   post '/users', to: 'users#index'
+  get '/users/:phone_number', to: 'users#show'
   post '/signup', to: 'users#signup'
   post '/login', to: 'users#login'
   get '/logout', to: 'users#logout'
