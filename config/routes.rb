@@ -26,4 +26,5 @@ Rails.application.routes.draw do
   end
 
   resources :plain_memes, only: [:index]
+  resources :channels, only: [:index, :show, :create]
 end

@@ -15,10 +15,16 @@
 #  name               :string
 #
 
-require 'test_helper'
+class MemeSerializer < ActiveModel::Serializer
+  attributes :id, :category_id, :name, :thumb_url, :original_url, :rating, :created_at
 
-class MemeTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  belongs_to :owner
+
+  def thumb_url
+    object.image.url(:thumb)
+  end
+
+  def original_url
+    object.image.url
+  end
 end

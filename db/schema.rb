@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161026115228) do
+ActiveRecord::Schema.define(version: 20161114003751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.integer  "channel_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_categories_on_channel_id", using: :btree
+  end
+
+  create_table "channels", force: :cascade do |t|
+    t.integer  "owner_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "chat_invitations", force: :cascade do |t|
     t.integer  "user_id"
@@ -51,12 +66,16 @@ ActiveRecord::Schema.define(version: 20161026115228) do
 
   create_table "memes", force: :cascade do |t|
     t.integer  "owner_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.decimal  "rating",             default: "0.0"
+    t.integer  "category_id"
+    t.string   "name"
+    t.index ["category_id"], name: "index_memes_on_category_id", using: :btree
   end
 
   create_table "messages", force: :cascade do |t|
@@ -90,10 +109,12 @@ ActiveRecord::Schema.define(version: 20161026115228) do
     t.datetime "updated_at",      null: false
   end
 
+  add_foreign_key "categories", "channels"
   add_foreign_key "chat_invitations", "chats"
   add_foreign_key "chat_invitations", "users"
   add_foreign_key "chat_users", "chats"
   add_foreign_key "chat_users", "users"
   add_foreign_key "fcm_registrations", "users"
+  add_foreign_key "memes", "categories"
   add_foreign_key "messages", "chats"
 end
