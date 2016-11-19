@@ -12,6 +12,13 @@ class MemesController < ApplicationController
     end
   end
 
+  def search
+    tags_array = params[:tags].values.map!(&:downcase)
+    @memes = Meme.joins(:tags).where(tags: { text: tags_array }).uniq
+
+    render json: @memes, status: :ok
+  end
+
   private
 
   def meme_params
