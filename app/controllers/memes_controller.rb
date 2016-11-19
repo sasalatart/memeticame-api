@@ -3,7 +3,7 @@ class MemesController < ApplicationController
     @meme = Meme.new(meme_params)
     @meme.owner = @current_user
     @meme.build_base64_image(params)
-    @meme.build_tags(params)
+    @meme.build_tags(params[:tags].values)
 
     if @meme.save
       render json: @meme, status: :ok

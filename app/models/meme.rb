@@ -28,10 +28,8 @@ class Meme < ApplicationRecord
   validates :category, presence: true
   validates :name, presence: true
 
-  def build_tags(meme_params)
-    return unless meme_params[:tags].present?
-
-    meme_params[:tags].values.each do |tag_text|
+  def build_tags(tags_to_add)
+    tags_to_add.each do |tag_text|
       tags << (Tag.find_by(text: tag_text) || Tag.new(text: tag_text))
     end
   end
