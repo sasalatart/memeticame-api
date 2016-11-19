@@ -10,7 +10,6 @@
 #  image_content_type :string
 #  image_file_size    :integer
 #  image_updated_at   :datetime
-#  rating             :decimal(, )      default(0.0)
 #  category_id        :integer
 #  name               :string
 #
@@ -28,5 +27,9 @@ class MemeSerializer < ActiveModel::Serializer
 
   def original_url
     object.image.url
+  end
+
+  def rating
+    object.ratings.average(:value) || 0
   end
 end

@@ -17,6 +17,6 @@ class ChannelSerializer < ActiveModel::Serializer
   has_many :categories
 
   def rating
-    object.memes.average(:rating) || 0
+    Rating.where(meme: object.memes).average(:value) || 0
   end
 end

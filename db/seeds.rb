@@ -20,12 +20,13 @@ end
 
 def create_text_memes(dir, category, owner)
   dir.each do |meme_with_text|
-    Meme.create!(
+    meme = Meme.create!(
       category: category,
       owner: owner, image: create_image(meme_with_text),
       name: File.basename(meme_with_text, File.extname(meme_with_text)),
-      rating: 5 * rand
     )
+
+    meme.ratings << Rating.create!(meme: meme, user: owner, value: 5 * rand())
   end
 end
 

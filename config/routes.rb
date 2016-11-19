@@ -27,8 +27,11 @@ Rails.application.routes.draw do
 
   resources :plain_memes, only: [:index]
   resources :channels, only: [:index, :show, :create] do
-    resources :categories, only: [] do
-      resources :memes, shallow: true, only: [:create]
+    resources :categories, shallow: true, only: [] do
+      resources :memes, shallow: true, only: [:create] do
+        get '/my_rating', to: 'ratings#my_rating'
+        resources :ratings, shallow: true, only: [:create]
+      end
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118011628) do
+ActiveRecord::Schema.define(version: 20161119162506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,13 +75,12 @@ ActiveRecord::Schema.define(version: 20161118011628) do
 
   create_table "memes", force: :cascade do |t|
     t.integer  "owner_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.decimal  "rating",             default: "0.0"
     t.integer  "category_id"
     t.string   "name"
     t.index ["category_id"], name: "index_memes_on_category_id", using: :btree
@@ -109,6 +108,16 @@ ActiveRecord::Schema.define(version: 20161118011628) do
     t.datetime "image_updated_at"
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.integer  "meme_id"
+    t.integer  "user_id"
+    t.decimal  "value",      default: "0.0"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["meme_id"], name: "index_ratings_on_meme_id", using: :btree
+    t.index ["user_id"], name: "index_ratings_on_user_id", using: :btree
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string   "text"
     t.datetime "created_at", null: false
@@ -134,4 +143,6 @@ ActiveRecord::Schema.define(version: 20161118011628) do
   add_foreign_key "meme_tags", "tags"
   add_foreign_key "memes", "categories"
   add_foreign_key "messages", "chats"
+  add_foreign_key "ratings", "memes"
+  add_foreign_key "ratings", "users"
 end
