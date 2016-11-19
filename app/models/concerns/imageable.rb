@@ -13,9 +13,9 @@ module Imageable
 
   def build_base64_image(image_params)
     base64 = "data:#{image_params[:mime_type]};base64,#{image_params[:base64]}"
-    attachment = Paperclip.io_adapters.for(base64)
-    attachment.content_type = image_params[:mime_type]
-    attachment.original_filename = image_params[:name]
-    self.attachment = attachment
+    image = Paperclip.io_adapters.for(base64)
+    image.content_type = image_params[:mime_type]
+    image.original_filename = "#{image_params[:name]}.#{image_params[:mime_type].split('/').last}"
+    self.image = image
   end
 end

@@ -26,5 +26,9 @@ Rails.application.routes.draw do
   end
 
   resources :plain_memes, only: [:index]
-  resources :channels, only: [:index, :show, :create]
+  resources :channels, only: [:index, :show, :create] do
+    resources :categories, only: [] do
+      resources :memes, shallow: true, only: [:create]
+    end
+  end
 end

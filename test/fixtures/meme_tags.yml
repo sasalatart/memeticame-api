@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: meme_tags
+#
+#  id         :integer          not null, primary key
+#  meme_id    :integer
+#  tag_id     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  meme: one
+  tag: one
+
+two:
+  meme: two
+  tag: two

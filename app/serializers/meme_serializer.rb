@@ -20,6 +20,8 @@ class MemeSerializer < ActiveModel::Serializer
 
   belongs_to :owner
 
+  has_many :tags
+
   def thumb_url
     object.image.url(:thumb)
   end
