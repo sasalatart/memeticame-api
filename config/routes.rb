@@ -36,4 +36,5 @@ Rails.application.routes.draw do
   end
 
   post '/search_memes', to: 'memes#search'
+  post '/recognize', to: 'emotions#recognize'
 end

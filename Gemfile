@@ -16,6 +16,7 @@ gem 'fcm'
 
 gem 'paperclip', '~> 5.0.0'
 gem 'paperclip-av-transcoder'
+gem 'dropbox-sdk'
 
 gem 'rubyzip'
 gem 'mini_magick'

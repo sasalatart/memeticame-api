@@ -57,6 +57,8 @@ GEM
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     concurrent-ruby (1.0.2)
+    dropbox-sdk (1.6.5)
+      json
     erubis (2.7.0)
     fcm (0.0.2)
       httparty
@@ -164,6 +166,7 @@ DEPENDENCIES
   annotate
   bcrypt (~> 3.1.7)
   byebug
+  dropbox-sdk
   fcm
   hirb
   listen (~> 3.0.5)
