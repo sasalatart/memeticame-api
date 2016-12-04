@@ -13,10 +13,15 @@ class MemesController < ApplicationController
   end
 
   def search
-    tags_array = params[:tags].values.map!(&:downcase)
-    @memes = Meme.joins(:tags).where(tags: { text: tags_array }).uniq
+    if params[:tags] && params[:tags].values[0].present?
+      @memes = Meme.includes(:tags)
+                   .where(tags: { text: params[:tags].values.map(&:downcase) })
+    end
 
-    render json: @memes, status: :ok
+    name = params[:name]
+    @memes = (@memes || Meme.all).where('name LIKE ?', "%#{name}%") if name
+
+    render json: @memes.distinct, status: :ok
   end
 
   private
