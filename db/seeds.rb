@@ -6,8 +6,25 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-admin = User.create!(name: 'Memeticame', phone_number: '55555555',
-                     password: 'napoleon', password_confirmation: 'napoleon')
+admin = User.create!(name: 'Memeticame',
+                     phone_number: '55555555',
+                     password: 'napoleon',
+                     password_confirmation: 'napoleon')
+
+User.create!(name: 'sasalatart',
+             phone_number: '987654321',
+             password: 'napoleon',
+             password_confirmation: 'napoleon')
+
+User.create!(name: 'Giovanni',
+             phone_number: '933333333',
+             password: 'napoleon',
+             password_confirmation: 'napoleon')
+
+User.create!(name: 'saoliva',
+             phone_number: '922222222',
+             password: 'napoleon',
+             password_confirmation: 'napoleon')
 
 def create_image(path)
   image_file = File.new(path)
