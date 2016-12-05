@@ -30,7 +30,7 @@ class Meme < ApplicationRecord
 
   def build_tags(tags_to_add)
     tags_to_add.each do |tag_text|
-      tags << (Tag.find_by(text: tag_text) || Tag.new(text: tag_text))
+      tags << (Tag.find_by(text: tag_text.downcase) || Tag.new(text: tag_text))
     end
   end
 end

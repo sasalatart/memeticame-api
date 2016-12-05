@@ -26,6 +26,8 @@ User.create!(name: 'saoliva',
              password: 'napoleon',
              password_confirmation: 'napoleon')
 
+@tags = 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed'.split
+
 def create_image(path)
   image_file = File.new(path)
   ActionDispatch::Http::UploadedFile.new(
@@ -44,6 +46,7 @@ def create_text_memes(dir, category, owner)
     )
 
     meme.ratings << Rating.create!(meme: meme, user: owner, value: 5 * rand())
+    meme.build_tags(@tags.shuffle[0..(1 + rand(@tags.size / 2))])
   end
 end
 
