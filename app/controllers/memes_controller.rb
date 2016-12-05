@@ -14,7 +14,7 @@ class MemesController < ApplicationController
 
   def search
     if params[:tags] && params[:tags].values[0].present?
-      @memes = Meme.includes(:tags)
+      @memes = Meme.joins(:tags)
                    .where(tags: { text: params[:tags].values.map(&:downcase) })
     end
 
