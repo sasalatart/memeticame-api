@@ -10,7 +10,7 @@ class ChatsController < ApplicationController
     if @chat.users.include?(@current_user)
       render json: @chat, status: :ok
     else
-      render json: { message: 'Not allowed' }, status: :bad_request
+      render json: { message: 'Not allowed' }, status: :forbidden
     end
   end
 
