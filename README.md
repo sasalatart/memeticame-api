@@ -1515,7 +1515,9 @@ $ docker-compose stop
 #### When A User Signs Up
 
 - collapse_key: 'user_created'
+
 - data:
+
   ```javascript
   { user: a_serialized_user }
   ```
